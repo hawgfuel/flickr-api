@@ -1,10 +1,10 @@
-import { Template } from  "./pages/template/template";
-
+import React from 'react';
+import { FlickrApi } from  "./pages/flickr/flickr";
 
 function App() {
   return (
     <div className="App">
-      <Template />
+      <FlickrApi />
     </div>
   );
 }
