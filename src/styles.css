@@ -8,10 +8,11 @@ body.phonebook {
     color:#fff;
 }
 
-button {
-    display: inline-block;
+button, .row button {
+    display: inline;
     text-align: left;
     border:none;
+    width:auto;
     color:#839496;
     background-color: transparent;
 }
@@ -24,4 +25,38 @@ button {
 }
 .image-size-z {
     width:640px;
+}
+
+.pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	gap: 20px;
+}
+
+.pagination .page-number {
+	font-size: 14px;
+	font-weight: 600;
+	color: #042D37;
+	background: #fff;
+	padding: 10px 20px;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: all 0.5s ease;
+}
+
+.pagination .page-number:hover {
+	color: #fff;
+	background: #00a8ff;
+}
+
+.pagination .active {
+	color: #fff;
+	background: #00a8ff;
+}
+
+.pagination .active:hover {
+	color: #00a8ff;
+	background: #fff;
 }

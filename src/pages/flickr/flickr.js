@@ -1,15 +1,25 @@
 import React, {useState, useEffect} from 'react';
-
+import {Paginate} from '../../components/paginate/paginate';
   //`https://api.flickr.com/services/rest/?method=flickr.favorites.getList&api_key=29b2fa3defd68fd099b0a1e9260b0d73&per_page=10&format=json&nojsoncallback=1`
 
 export function FlickrApi() {
   const interestingList = 'flickr.interestingness.getList';
   const userPhotos = 'flickr.panda.getPhotos';
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [method, setMethod] = useState(interestingList);
- 
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(6);
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = data.slice(indexOfFirstPost, indexOfLastPost);
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+ };
+
   const url = `https://www.flickr.com/services/rest/?method=${method}&api_key=29b2fa3defd68fd099b0a1e9260b0d73&user_id=hawgfuel&limit=20`;
-   
+   // TODO: pagination. could custom hook, useArray be useful for pagination? interesting list produces 500 records.
   useEffect(() => {
     async function getUserImages(url) {
       try {
@@ -27,14 +37,27 @@ export function FlickrApi() {
           server: photo.getAttribute('server'),
           title: photo.getAttribute('title')
         }));
+        setLoading(false);
         setData(parsedPhotos);
       } catch (error) {
         console.log('error=', error);
+        setLoading(false);
       }
     }
     getUserImages(url);
   }, [url]);
 
+  const previousPage = () => {
+    if (currentPage !== 1) {
+       setCurrentPage(currentPage - 1);
+    }
+ };
+
+ const nextPage = () => {
+    if (currentPage !== Math.ceil(data.length / postsPerPage)) {
+       setCurrentPage(currentPage + 1);
+    }
+ };
 
 const getImageUrl= (serverid,id,secret,sizesuffix) => {
   // https://www.flickr.com/services/api/misc.urls.html documentation
@@ -44,14 +67,28 @@ const getImageUrl= (serverid,id,secret,sizesuffix) => {
   return (
     <div className='container row bs-component mx-auto gap-3'>
       <h1 className='page-header p-2'>Flickr API</h1>
-      <button type='button' onClick={() => setMethod(interestingList)}>Interesting list</button>
-      <button type='button' onClick={() => setMethod(userPhotos)}>Hawgfuel photos</button>
-        {data && data.map(photo => (
+      <div>
+        <button type='button' onClick={() => setMethod(interestingList)}>Interesting list</button> | 
+        <button type='button' onClick={() => setMethod(userPhotos)}>Hawgfuel photos</button>
+      </div>
+      {loading && <h1>Loading...</h1>}
+        {data && currentPosts.map(photo => (
           <div className="gallery-image image-size-w" key={photo.id}>
             <img alt={photo.title} src={getImageUrl(photo.server,photo.id,photo.secret, 'w')} />
             <p>{photo.title} by {photo.owner}</p>
           </div>
-        ))}
+        ))
+    }
+    <div className=''>
+        {/* ... */}
+        <Paginate
+           postsPerPage={postsPerPage}
+           totalPosts={data.length}
+           paginate={paginate}
+           previousPage={previousPage}
+            nextPage={nextPage}
+        />
+        </div>
     </div>
   );
 }
