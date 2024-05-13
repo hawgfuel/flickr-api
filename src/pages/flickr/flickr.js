@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import {Paginate} from '../../components/paginate/paginate';
-  //`https://api.flickr.com/services/rest/?method=flickr.favorites.getList&api_key=29b2fa3defd68fd099b0a1e9260b0d73&per_page=10&format=json&nojsoncallback=1`
 
 export function FlickrApi() {
   const interestingList = 'flickr.interestingness.getList';
-  const userPhotos = 'flickr.panda.getPhotos';
+  const userPhotos = 'flickr.people.getPhotos';
+  const favorites = 'flickr.favorites.getList';
+  const user_id = '12757364@N04';
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [method, setMethod] = useState(interestingList);
+  const [method, setMethod] = useState(userPhotos);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(6);
@@ -17,9 +18,9 @@ export function FlickrApi() {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
  };
-
-  const url = `https://www.flickr.com/services/rest/?method=${method}&api_key=29b2fa3defd68fd099b0a1e9260b0d73&user_id=hawgfuel&limit=20`;
-   // TODO: pagination. could custom hook, useArray be useful for pagination? interesting list produces 500 records.
+ 
+  const url = `https://www.flickr.com/services/rest/?method=${method}&api_key=${process.env.REACT_APP_flickr_api_key}&user_id=${user_id}&format=json&nojsoncallback=1`;
+   // TODO: update with react pagination.
   useEffect(() => {
     async function getUserImages(url) {
       try {
@@ -27,15 +28,14 @@ export function FlickrApi() {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const text = await response.text();
-        const xmlDoc = new DOMParser().parseFromString(text, "text/xml");
-        const photos = xmlDoc.getElementsByTagName('photo');
-        const parsedPhotos = Array.from(photos).map(photo => ({
-          id: photo.getAttribute('id'),
-          owner: photo.getAttribute('owner'),
-          secret: photo.getAttribute('secret'),
-          server: photo.getAttribute('server'),
-          title: photo.getAttribute('title')
+        const jsonData = await response.json();
+        const photos = jsonData.photos.photo;
+        const parsedPhotos = photos.map(photo => ({
+          id: photo.id,
+          owner: photo.owner,
+          secret: photo.secret,
+          server: photo.server,
+          title: photo.title
         }));
         setLoading(false);
         setData(parsedPhotos);
@@ -69,7 +69,8 @@ const getImageUrl= (serverid,id,secret,sizesuffix) => {
       <h1 className='page-header p-2'>Flickr API</h1>
       <div>
         <button type='button' onClick={() => setMethod(interestingList)}>Interesting list</button> | 
-        <button type='button' onClick={() => setMethod(userPhotos)}>Hawgfuel photos</button>
+        <button type='button' onClick={() => setMethod(userPhotos)}>Hawgfuel's photos</button> |
+        <button type='button' onClick={() => setMethod(favorites)}>Hawgfuel's favorites</button>
       </div>
       {loading && <h1>Loading...</h1>}
         {data && currentPosts.map(photo => (
