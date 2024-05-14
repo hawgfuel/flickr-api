@@ -81,13 +81,12 @@ const getImageUrl= (serverid,id,secret,sizesuffix) => {
         ))
     }
     <div className=''>
-        {/* ... */}
         <Paginate
            postsPerPage={postsPerPage}
            totalPosts={data.length}
            paginate={paginate}
            previousPage={previousPage}
-            nextPage={nextPage}
+          nextPage={nextPage}
         />
         </div>
     </div>

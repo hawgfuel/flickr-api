@@ -1,4 +1,4 @@
-body.phonebook {
+body {
     background-color: #042d37;
     color:#839496 ;
 }
@@ -17,9 +17,7 @@ button, .row button {
     background-color: transparent;
 }
 
-.gallery-image {
-   float:left;
-}
+
 .image-size-w {
     width:400px;
 }
