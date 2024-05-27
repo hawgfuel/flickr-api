@@ -1,6 +1,6 @@
 import React from 'react';
  
-export const Paginate = ({ postsPerPage, totalPosts, paginate, previousPage, nextPage }) => {
+export const Paginate = ({ postsPerPage, totalPosts, paginate, previousPage, nextPage, currentPage }) => {
    const pageNumbers = [];
  
    for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
@@ -8,7 +8,7 @@ export const Paginate = ({ postsPerPage, totalPosts, paginate, previousPage, nex
    }
  
    return (
-      <div className="pagination-container">
+      <nav>
          <ul className="pagination">
          <li onClick={previousPage} className="page-number">
                Prev
@@ -17,7 +17,7 @@ export const Paginate = ({ postsPerPage, totalPosts, paginate, previousPage, nex
                <li
                   key={number}
                   onClick={() => paginate(number)}
-                  className="page-number page-item"
+                  className={"page-number page-item " + (currentPage === number ? 'active' : '')}
                >
                   {number}
                </li>
@@ -26,7 +26,7 @@ export const Paginate = ({ postsPerPage, totalPosts, paginate, previousPage, nex
                Next
             </li>
          </ul>
-      </div>
+      </nav>
    );
 };
  

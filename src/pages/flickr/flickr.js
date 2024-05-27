@@ -85,8 +85,9 @@ const getImageUrl= (serverid,id,secret,sizesuffix) => {
            postsPerPage={postsPerPage}
            totalPosts={data.length}
            paginate={paginate}
+           currentPage={currentPage}
            previousPage={previousPage}
-          nextPage={nextPage}
+            nextPage={nextPage}
         />
         </div>
     </div>

@@ -24,3 +24,19 @@ button, .row button {
 .image-size-z {
     width:640px;
 }
+
+.pagination {
+    margin: auto;
+    width:70%;
+}
+
+.page-number{
+    padding: .5rem .75rem;
+    border-left: 1px solid #839496;
+}
+
+.page-number:first-child{
+    border-left:none;
+}
+
+.active {background-color: hwb(0 18% 82%);}
