@@ -39,6 +39,7 @@ export function FlickrApi() {
         }));
         setLoading(false);
         setData(parsedPhotos);
+        setCurrentPage(1);
       } catch (error) {
         console.log('error=', error);
         setLoading(false);
