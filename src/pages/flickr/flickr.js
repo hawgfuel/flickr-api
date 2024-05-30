@@ -20,7 +20,6 @@ export function FlickrApi() {
  };
  
   const url = `https://www.flickr.com/services/rest/?method=${method}&api_key=${process.env.REACT_APP_flickr_api_key}&user_id=${user_id}&format=json&nojsoncallback=1`;
-   // TODO: update with react pagination.
   useEffect(() => {
     async function getUserImages(url) {
       try {
@@ -61,7 +60,6 @@ export function FlickrApi() {
  };
 
 const getImageUrl= (serverid,id,secret,sizesuffix) => {
-  // https://www.flickr.com/services/api/misc.urls.html documentation
   return `https://live.staticflickr.com/${serverid}/${id}_${secret}_${sizesuffix}.jpg`;
 };
 
